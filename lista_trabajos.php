@@ -241,11 +241,11 @@ foreach ($result as $row){
           <li class="nav-item">
             <a class="nav-link" href="inventario.php">
               <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Inventario</span>
+              <span class="menu-title">Respuestos</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="lista_trabajos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Trabajos realizados</span>
             </a>
@@ -254,38 +254,6 @@ foreach ($result as $row){
             <a class="nav-link" href="vehiculos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Lista vehiculos</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-              <i class="icon-head menu-icon"></i>
-              <span class="menu-title">User Pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="auth">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="pages/documentation/documentation.html">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Documentation</span>
             </a>
           </li>
         </ul>
@@ -334,11 +302,11 @@ foreach ($result as $row){
             </div>
             <div class="modal-body">
                 <p>Ingresa cedula del cliente</p>
-                <input type="text" name="cedula_cliente" id="cedula_cliente" class="form-control"> 
+                <input type="number" name="cedula_cliente" id="cedula_cliente" class="form-control"> 
                 <input type="hidden" name="action" id="action">
                 <input type="hidden" name="old_name" id="old_name"><br>
                 <p>Ingresa cedula del mecanico</p>
-                <input type="text" name="cedula_mecanico" id="cedula_mecanico" class="form-control"> 
+                <input type="number" name="cedula_mecanico" id="cedula_mecanico" class="form-control"> 
                 <p>Ingresa una descripcion del trabajo</p>
                 <input type="textarea" name="desc_trabajo" id="desc_trabajo" class="form-control"> 
                 <label for="estado_trabajo" style="font-size:20px">Estado</label><br>
@@ -424,7 +392,7 @@ $(document).ready(function(){
             var action = $('#action').val(); 
 
 
-            if(cedula_cliente != ''){
+            if(cedula_cliente != '' || cedula_mecanico != '' || desc_trabajo != '' || estado_trabajo != ''){
                 $.ajax(
                     {
                     url:"action.php",
@@ -432,8 +400,9 @@ $(document).ready(function(){
                     data:{cedula_cliente:cedula_cliente, action:action,cedula_mecanico:cedula_mecanico,desc_trabajo:desc_trabajo,estado_trabajo:estado_trabajo},
                     success:function(data)
                     {
-                        $('#folderModal').modal('hide');
+                      $('#folderModal').modal('hide');
                         alert(data);
+                        load_list();
                     }
                     }
                 )

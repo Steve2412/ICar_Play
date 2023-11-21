@@ -243,11 +243,11 @@ $id=$_GET['marca'];
           <li class="nav-item">
             <a class="nav-link" href="inventario.php">
               <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Inventario</span>
+              <span class="menu-title">Respuestos</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="lista_trabajos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Trabajos realizados</span>
             </a>
@@ -256,38 +256,6 @@ $id=$_GET['marca'];
             <a class="nav-link" href="vehiculos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Lista vehiculos</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-              <i class="icon-head menu-icon"></i>
-              <span class="menu-title">User Pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="auth">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="pages/documentation/documentation.html">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Documentation</span>
             </a>
           </li>
         </ul>
@@ -302,8 +270,8 @@ $id=$_GET['marca'];
                   <h3 class="font-weight-bold">Lista de <?php echo $id; ?></h3>
                 </div>
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <button type="button" name="create_folder" id="crear_modelo" class="btn btn-success">Añadir Modelo</button><br><br>
-                </div>
+                <button type="button" name="create_folder" id="crear_modelo" class="btn btn-success">Añadir Modelo</button>
+                  <button type="button" name="volver" id="volver" onclick="history.back()" class="btn btn-secondary">Volver</button><br><br>
                 <div class="col-12 col-xl-4">
                  <div class="justify-content-end d-flex">
                   <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
@@ -333,13 +301,14 @@ $id=$_GET['marca'];
         <div class="card">
           <div class="card__image-container">
             <img
-              src="assets/images/vehiculos/toyota.jpg"
+              src="assets/images/404.png"
             />
           </div>
           <div class="card__content">
             <p class="card__title text--medium">';
-            echo $modelo;
-
+            echo $modelo; 
+              echo '<br><br>cantidad: ';
+              echo $cantidad;
             echo'
             </p>
             <div class="card__info">
@@ -369,11 +338,11 @@ $id=$_GET['marca'];
                 <input type="hidden" name="action" id="action">
                 <input type="hidden" name="old_name" id="old_name"><br>
                 <p>Ingresa año del modelo</p>
-                <input type="text" name="año_modelo" id="año_modelo" class="form-control"> 
+                <input type="number" name="año_modelo" onkeypress="if (this.value.length > 3) return false;" id="año_modelo" class="form-control"> 
                 <p>Ingresa vin del modelo</p>
-                <input type="text" name="vin_modelo" id="vin_modelo" class="form-control"> 
+                <input type="text" name="vin_modelo" id="vin_modelo" onkeypress="if (this.value.length > 16) return false;" class="form-control"> 
                 <p>Ingresa matricula del modelo</p>
-                <input type="text" name="matricula_modelo" id="matricula_modelo" class="form-control"> 
+                <input type="text" name="matricula_modelo" id="matricula_modelo" onkeypress="if (this.value.length > 6) return false;" class="form-control"> 
                 <input type="hidden" name="image_id" id="image_id">
                 <label for="tipo_modelo" style="font-size:20px">Tipo de vehiculo</label><br>
                 <select class="form-select form-select-lg mb-3" style="font-size:20px" name="tipo_modelo" id="tipo_modelo"> 
@@ -381,6 +350,8 @@ $id=$_GET['marca'];
                <option style="font-size:20px" value="Camion">Camion</option>
                <option style="font-size:20px" value="Autobus">Autobus</option>
             </select><br><br>
+              <p>Ingresa costo</p>
+                <input type="number" name="costo_modelo" onkeyup="agregarDecimal()" id="costo_modelo" class="form-control">
                 <input type="button" name="modelo_button" id="modelo_button" class="btn btn-info" value="Create">
             </div>
             <div class="modal-footer">
@@ -413,6 +384,18 @@ $id=$_GET['marca'];
   <script src="assets/js/dashboard.js"></script>
 
   <script>
+
+function agregarDecimal() {
+  var num = costo_modelo.value.replace(/\./g,'');
+  if(!isNaN(num)){
+    num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{2})?/,'$1.');
+    num = num.split('').reverse().join('').replace(/^[\.]/,'');
+    costo_modelo.value = num;
+  } else {
+    alert('Solo se permiten números');
+    costo_modelo.value = costo_modelo.value.replace(/[^\d\.]*/g,'');
+  }
+}
         $(document).ready(function(){
           $(document).on('click','#crear_modelo',function(){
             $('#action').val('crear_modelo');
@@ -421,6 +404,7 @@ $id=$_GET['marca'];
             $('#vin_modelo').val('');
             $('#matricula_modelo').val('');
             $('#tipo_modelo').val('');
+            $('#costo_modelo').val('');
             $('#modelo_button').val('create');
             $('#old_name').val('');
             $('#image_name').val('');
@@ -434,21 +418,22 @@ $id=$_GET['marca'];
             var vin_modelo= $('#vin_modelo').val();
             var matricula_modelo= $('#matricula_modelo').val();
             var tipo_modelo= $('#tipo_modelo').val();
+            var costo_modelo= $('#costo_modelo').val();
             var marca = <?php echo json_encode("$id", JSON_HEX_TAG); ?>;
             var action = $('#action').val(); 
 
 
-            if(nombre_modelo != ''){
+            if(nombre_modelo != '' || año_modelo != '' || vin_modelo != '' || matricula_modelo != '' || tipo_modelo != '' || costo_modelo != '' || marca != '') {
                 $.ajax(
                     {
                     url:"action.php",
                     type:"POST",
-                    data:{nombre_modelo:nombre_modelo, action:action,marca:marca,año_modelo:año_modelo,vin_modelo:vin_modelo,matricula_modelo:matricula_modelo,tipo_modelo:tipo_modelo},
+                    data:{nombre_modelo:nombre_modelo, action:action,marca:marca,año_modelo:año_modelo,vin_modelo:vin_modelo,matricula_modelo:matricula_modelo,tipo_modelo:tipo_modelo,costo_modelo:costo_modelo},
                     success:function(data)
                     {
-                        $('#folderModal').modal('hide');
+                      $('#folderModal').modal('hide');
                         alert(data);
-                        windows
+                        load_list();
                     }
                     }
                 )

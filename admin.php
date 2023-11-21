@@ -18,7 +18,21 @@ foreach ($result as $row){
    }
 
 
+   $sql = "SELECT COUNT(*) FROM vehiculos";
+   $res = $conectar->query($sql);
+   $count = $res->fetchColumn();
 
+   $sql_2 = "SELECT COUNT(*) FROM trabajos WHERE estado = 'Espera'";
+   $res_2 = $conectar->query($sql_2);
+   $count_2 = $res_2->fetchColumn();
+
+   $sql_3 = "SELECT COUNT(*) FROM trabajos WHERE estado = 'En Proceso'";
+   $res_3 = $conectar->query($sql_3);
+   $count_3 = $res_3->fetchColumn();
+
+   $sql_4 = "SELECT COUNT(*) FROM trabajos WHERE estado = 'Arreglado'";
+   $res_4 = $conectar->query($sql_4);
+   $count_4 = $res_4->fetchColumn();
 
 ?>
 
@@ -243,11 +257,11 @@ foreach ($result as $row){
           <li class="nav-item">
             <a class="nav-link" href="inventario.php">
               <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Inventario</span>
+              <span class="menu-title">Respuestos</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="lista_trabajos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Trabajos realizados</span>
             </a>
@@ -256,38 +270,6 @@ foreach ($result as $row){
             <a class="nav-link" href="vehiculos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Lista vehiculos</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-              <i class="icon-head menu-icon"></i>
-              <span class="menu-title">User Pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="auth">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="pages/documentation/documentation.html">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Documentation</span>
             </a>
           </li>
         </ul>
@@ -329,15 +311,15 @@ foreach ($result as $row){
                   <div class="card card-tale">
                     <div class="card-body">
                       <p class="mb-4">Total de autos en stock</p>
-                      <p class="fs-30 mb-2">4006</p>
+                      <p class="fs-30 mb-2"><?php echo $count ?></p>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-6 mb-4 stretch-card transparent">
                   <div class="card card-dark-blue">
                     <div class="card-body">
-                      <p class="mb-4">Autor arreglados el dia de hoy</p>
-                      <p class="fs-30 mb-2">61344</p>
+                      <p class="mb-4">Autos arreglados</p>
+                      <p class="fs-30 mb-2"><?php echo $count_4 ?></p>
                     </div>
                   </div>
                 </div>
@@ -347,7 +329,7 @@ foreach ($result as $row){
                   <div class="card card-light-blue">
                     <div class="card-body">
                       <p class="mb-4">Autos en proceso de revision</p>
-                      <p class="fs-30 mb-2">34040</p>
+                      <p class="fs-30 mb-2"><?php echo $count_3 ?></p>
                     </div>
                   </div>
                 </div>
@@ -355,7 +337,7 @@ foreach ($result as $row){
                   <div class="card card-light-danger">
                     <div class="card-body">
                       <p class="mb-4">Autos en espera de revision</p>
-                      <p class="fs-30 mb-2">47033</p>
+                      <p class="fs-30 mb-2"><?php echo $count_2 ?></p>
                     </div>
                   </div>
                 </div>

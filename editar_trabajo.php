@@ -250,11 +250,11 @@ foreach ($result as $row){
           <li class="nav-item">
             <a class="nav-link" href="inventario.php">
               <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Inventario</span>
+              <span class="menu-title">Respuestos</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="lista_trabajos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Trabajos realizados</span>
             </a>
@@ -263,38 +263,6 @@ foreach ($result as $row){
             <a class="nav-link" href="vehiculos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Lista vehiculos</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-              <i class="icon-head menu-icon"></i>
-              <span class="menu-title">User Pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="auth">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="pages/documentation/documentation.html">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Documentation</span>
             </a>
           </li>
         </ul>
@@ -306,7 +274,10 @@ foreach ($result as $row){
             <div class="col-md-12 grid-margin">
               <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                  <h3 class="font-weight-bold">Lista de Trabajos</h3>
+                  <h3 class="font-weight-bold">Editar Trabajos</h3>
+                  <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                <button type="button" name="volver" id="volver" onclick="history.back()" class="btn btn-secondary">Volver</button><br><br>
+              </div>
                 </div>
 
                 <div class="col-12 col-xl-4">
@@ -367,7 +338,7 @@ $(document).ready(function(){
             var action = "actualizar_trabajo";
 
 
-            if(desc_trabajo != ''){
+            if(desc_trabajo != '' || estado_trabajo != '' || id != ''){
                 $.ajax(
                     {
                     url:"action.php",
@@ -376,6 +347,7 @@ $(document).ready(function(){
                     success:function(data)
                     {
                         alert(data);
+                        window.location = "lista_trabajos.php"
                     }
                     }
                 )

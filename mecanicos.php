@@ -241,11 +241,11 @@ foreach ($result as $row){
           <li class="nav-item">
             <a class="nav-link" href="inventario.php">
               <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Inventario</span>
+              <span class="menu-title">Respuestos</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="lista_trabajos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Trabajos realizados</span>
             </a>
@@ -254,38 +254,6 @@ foreach ($result as $row){
             <a class="nav-link" href="vehiculos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Lista vehiculos</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-              <i class="icon-head menu-icon"></i>
-              <span class="menu-title">User Pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="auth">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="pages/documentation/documentation.html">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Documentation</span>
             </a>
           </li>
         </ul>
@@ -298,6 +266,14 @@ foreach ($result as $row){
               <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                   <h3 class="font-weight-bold">Lista de Mecanicos</h3>
+                </div>
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                <button type="button" name="insertar_mecanicos" id="insertar_mecanicos" class="btn btn-success">Añadir Mecanico</button><br><br>
+                </div>
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                  <form action='exportar/mecanicos.php' method='post' class='mb-2'>
+                  <input type='submit' name='submit' class='btn btn-outline-danger' value='Exportar PDF'>
+                  </form>
                 </div>
                 <div class="col-12 col-xl-4">
                  <div class="justify-content-end d-flex">
@@ -322,7 +298,33 @@ foreach ($result as $row){
                   </div>
                 </div>
           </div>
-
+          <div id="folderModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-tittle"><span id="change-title">Añadir nuevo mecanico</span></h4>
+            </div>
+            <div class="modal-body">
+                <p>Ingresa cedula del mecanico</p>
+                <input type="number" name="cedula_mecanico" id="cedula_mecanico" class="form-control"> 
+                <input type="hidden" name="action" id="action">
+                <input type="hidden" name="old_name" id="old_name"><br>
+                <p>Ingresa nombre del mecanico</p>
+                <input type="text" name="nonbre_mecanico" id="nonbre_mecanico" class="form-control"> 
+                <p>Ingresa correo del mecanico</p>
+                <input type="email" name="correo_mecanico" id="correo_mecanico" class="form-control"> 
+                <p>Ingresa direccion del mecanico</p>
+                <input type="tex" name="direccion_mecanico" id="direccion_mecanico" class="form-control">
+                <p>Ingresa telefono del mecanico</p>
+                <input type="number" name="telefono_mecanico" id="telefono_mecanico" class="form-control">
+                <input type="button" name="mecanico_button" id="mecanico_button" class="btn btn-info" value="Create">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
@@ -369,6 +371,52 @@ $(document).ready(function(){
             var page = $(this).attr("id");
             load_list(page);
          });
+
+         $(document).on('click','#insertar_mecanicos',function(){
+            $('#action').val('crear_mecanico');
+            $('#cedula_mecanico').val('');
+            $('#nonbre_mecanico').val('');
+            $('#correo_mecanico').val('');
+            $('#direccion_mecanico').val('');
+            $('#telefono_mecanico').val('');
+            $('#trabajo_button').val('create');
+            $('#old_name').val('');
+            $('#change_title').text('Create Folder');
+            $('#folderModal').modal('show');
+        });   
+
+        $(document).on('click','#mecanico_button',function(){
+            var cedula_mecanico= $('#cedula_mecanico').val();
+            var nonbre_mecanico= $('#nonbre_mecanico').val();
+            var correo_mecanico= $('#correo_mecanico').val();
+            var direccion_mecanico= $('#direccion_mecanico').val();
+            var telefono_mecanico= $('#telefono_mecanico').val();
+            var action = $('#action').val(); 
+
+
+            if(cedula_mecanico != '' || nonbre_mecanico != '' || correo_mecanico != '' || direccion_mecanico != '' || telefono_mecanico){
+                $.ajax(
+                    {
+                    url:"action.php",
+                    type:"POST",
+                    data:{cedula_mecanico:cedula_mecanico, action:action,nonbre_mecanico:nonbre_mecanico,correo_mecanico:correo_mecanico,direccion_mecanico:direccion_mecanico,telefono_mecanico:telefono_mecanico},
+                    success:function(data)
+                    {
+                      $('#folderModal').modal('hide');
+                        alert(data);
+                        load_list();
+
+                    }
+                    }
+                )
+
+            }else{
+                alert("Ingresa el nombre de la carpeta");
+            }
+
+        });
+
+
 })
 
 

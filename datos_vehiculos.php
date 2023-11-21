@@ -241,11 +241,11 @@ $id=$_GET['modelo'];
           <li class="nav-item">
             <a class="nav-link" href="inventario.php">
               <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Inventario</span>
+              <span class="menu-title">Respuestos</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="lista_trabajos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Trabajos realizados</span>
             </a>
@@ -254,38 +254,6 @@ $id=$_GET['modelo'];
             <a class="nav-link" href="vehiculos.php">
               <i class="icon-paper menu-icon"></i>
               <span class="menu-title">Lista vehiculos</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-              <i class="icon-head menu-icon"></i>
-              <span class="menu-title">User Pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="auth">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-ban menu-icon"></i>
-              <span class="menu-title">Error pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="pages/documentation/documentation.html">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Documentation</span>
             </a>
           </li>
         </ul>
@@ -300,7 +268,13 @@ $id=$_GET['modelo'];
                   <h3 class="font-weight-bold">Lista de <?php echo $id ?></h3>
                 </div>
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <button type="button" name="cambiar_imagen" id="cambiar_imagen" class="btn btn-success">Cambiar imagen</button><br><br>
+                <button type="button" name="cambiar_imagen" id="cambiar_imagen" class="btn btn-success">Cambiar imagen</button>
+                <button type="button" name="volver" id="volver" onclick="history.back()" class="btn btn-secondary">Volver</button><br><br>
+              </div>
+              <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                  <form action='exportar/datos_vehiculos.php?id=<?php echo $id?>' method='post' class='mb-2'>
+                  <input type='submit' name='submit' class='btn btn-outline-danger' value='Exportar PDF'>
+                  </form>
                 </div>
                 <div class="col-12 col-xl-4">
                  <div class="justify-content-end d-flex">
@@ -309,7 +283,8 @@ $id=$_GET['modelo'];
                  </div>
                 </div>
               </div>
-            </div>
+            </div></section> 
+            
             <textarea id="modelo" name="modelo" hidden value=" <?php  $id ?> "> <?php echo $id ?> </textarea> 
             <div class="row">
             <div class="col-md-12 grid-margin stretch-card">
@@ -326,6 +301,26 @@ $id=$_GET['modelo'];
                   </div>
                 </div>
           </div>
+
+          <div id="folderModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-tittle"><span id="change-title">Añadir Imagen</span></h4>
+            </div>
+            <div class="modal-body">
+                <p>Ingresa la imagen</p>
+                <input type="file" name="file" id="file" class="form-control"> 
+
+            </select><br><br>
+                <input type="button" name="insertar_button" id="insertar_button" class="btn btn-info" value="Create">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
@@ -375,6 +370,51 @@ $(document).ready(function(){
             var page = $(this).attr("id");
             load_list(page);
          });
+
+         $(document).on('click','#cambiar_imagen',function(){
+            $('#action').val('insertar_imagen');
+            $('#file').val('');
+            $('#modelo_button').val('create');
+            $('#old_name').val('');
+            $('#image_name').val('');
+            $('#change_title').text('Create Folder');
+            $('#folderModal').modal('show');
+        });  
+
+        $(document).on('click','#insertar_button',function(){
+          var action = $('#action').val(); 
+          var image_name = $('#file').val();
+          var nombre = <?php echo json_encode("$id", JSON_HEX_TAG); ?>;
+          if(!image_name == ''){
+            var extension = $('#file').val().split('.').pop().toLowerCase();
+            if(jQuery.inArray(extension, ['png','jpg','jpeg']) == 0){
+              $.ajax(
+                    {
+                    url:"action.php",
+                    type:"POST",
+                    data:new FormData(this),
+                    contentType:false,
+                    processData:false,
+                    success:function(data)
+                    {
+                        $('#cambiar_imagen').modal('hide');
+                        alert(data);
+                        load_list();
+                    }
+                    }
+                )
+
+            }else{
+              alert("Tipo de archivo incorrecto")
+            }
+
+          }else{
+            alert("inserte archivo");
+          }
+
+        }); 
+        
+        
 })
 
 
@@ -387,3 +427,7 @@ $(document).ready(function(){
 
 </html>
 
+<?php 
+
+
+?>
